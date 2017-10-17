@@ -1,3 +1,7 @@
 node_modules/  
 dist/  
+<<<<<<< HEAD
 npm-debug.log
+=======
+npm-debug.log
+>>>>>>> 1a164c2d70bfff4d25da7be5fadb753b44e12787
