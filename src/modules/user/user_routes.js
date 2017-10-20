@@ -1,28 +1,28 @@
-import Router from "koa-router";
+import Router from 'koa-router';
 import {
   createUser,
   getAllUsers,
   getUser,
-  getUserById
-} from "./user_controller";
-import models from "../../models";
+  getUserById,
+} from './user_controller';
+import models from '../../models';
 
-const user_router = new Router({ prefix: "/user" });
+const userRouter = new Router({ prefix: '/user' });
 
-user_router.get("/", async function(ctx) {
-  ctx.response.body = await getAllUsers(models);
+userRouter.get('/', async (ctx) => {
+  await getAllUsers(models, ctx);
 });
 
-user_router.get("/:id", async function(ctx) {
-  ctx.response.body = await getUserById(models, ctx.params.id);
+userRouter.get('/:id', async (ctx) => {
+  await getUserById(models, ctx);
 });
 
-user_router.get("/username/:uname", async function(ctx) {
-  ctx.response.body = await getUser(models, ctx.params.uname);
+userRouter.get('/username/:uname', async (ctx) => {
+  await getUser(models, ctx);
 });
 
-user_router.post("/create", async function(ctx) {
-  await createUser(models, ctx.request.body);
+userRouter.post('/create', async (ctx) => {
+  await createUser(models, ctx);
 });
 
-export default user_router;
+export default userRouter;

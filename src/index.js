@@ -1,19 +1,24 @@
-import Koa from "koa";
-import user_router from "./modules/user/user_routes";
-import bodyParser from "koa-bodyparser";
-import logger from "koa-logger";
-import mongoose from "mongoose";
-import bluebird from "bluebird";
+import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
+import logger from 'koa-logger';
+import mongoose from 'mongoose';
+import bluebird from 'bluebird';
+import jwToken from './middlewares/jwt';
+import userRouter from './modules/user/user_routes';
+import config from '../configs/config';
+
 mongoose.Promise = bluebird;
 
 const app = new Koa();
 
-mongoose.connect("mongodb://localhost:/koa-playground", {
-  useMongoClient: true
+mongoose.connect(config.database, {
+  useMongoClient: true,
 });
 
+app.use(jwToken);
 app.use(logger());
 app.use(bodyParser());
-app.use(user_router.routes()).use(user_router.allowedMethods());
 
-app.listen(3000);
+app.use(userRouter.routes()).use(userRouter.allowedMethods());
+
+app.listen(config.port);
