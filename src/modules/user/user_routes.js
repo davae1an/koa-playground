@@ -6,8 +6,11 @@ import {
   getUserById,
 } from './user_controller';
 import models from '../../models';
+import { jwToken, JWTErrorHandler } from '../../middlewares/jwt';
+
 
 const userRouter = new Router({ prefix: '/user' });
+userRouter.use(JWTErrorHandler).use(jwToken);
 
 userRouter.get('/', async (ctx) => {
   await getAllUsers(models, ctx);
