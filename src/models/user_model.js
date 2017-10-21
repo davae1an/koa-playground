@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import Promise from 'bluebird';
+import jsonwebtoken from 'jsonwebtoken';
+import config from '../../configs/config';
 
 
 const UserSchema = new mongoose.Schema({
@@ -48,6 +50,23 @@ UserSchema.pre('save', function preSave(next) {
     })
     .catch(err => next(err));
 });
+
+
+UserSchema.methods.validatePassword = function validatePassword(password) {
+  const user = this;
+
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(password, user.password, (err, isMatch) => {
+      if (err) { reject(err); }
+
+      resolve(isMatch);
+    });
+  });
+};
+
+UserSchema.methods.generateToken = function generateToken(payload) {
+  return jsonwebtoken.sign(payload, config.token);
+};
 
 
 const UserModel = mongoose.model('users', UserSchema);

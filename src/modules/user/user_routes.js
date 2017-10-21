@@ -1,4 +1,5 @@
 import Router from 'koa-router';
+import compose from 'koa-compose';
 import {
   createUser,
   getAllUsers,
@@ -8,22 +9,29 @@ import {
 import models from '../../models';
 import { jwToken, JWTErrorHandler } from '../../middlewares/jwt';
 
+// Composes middleware and stops the Object only error in router function
+const jwtware = compose([JWTErrorHandler, jwToken]);
+
+// userRouter.use(JWTErrorHandler).use(jwToken); <-- use to make all routes secure
 
 const userRouter = new Router({ prefix: '/user' });
-userRouter.use(JWTErrorHandler).use(jwToken);
 
-userRouter.get('/', async (ctx) => {
+
+// Secured Routes
+userRouter.get('/', jwtware, async (ctx) => {
   await getAllUsers(models, ctx);
 });
 
-userRouter.get('/:id', async (ctx) => {
+userRouter.get('/:id', jwtware, async (ctx) => {
   await getUserById(models, ctx);
 });
 
-userRouter.get('/username/:uname', async (ctx) => {
+userRouter.get('/username/:uname', jwtware, async (ctx) => {
   await getUser(models, ctx);
 });
 
+
+// Unsecured Routes
 userRouter.post('/create', async (ctx) => {
   await createUser(models, ctx);
 });

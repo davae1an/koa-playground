@@ -22,21 +22,22 @@ export async function getAllUsers(models, ctx) {
 }
 
 export async function getUser(models, ctx) {
-  const user = await models.UserModel.find({ username: ctx.params.uname });
+  const user = await models.UserModel.findOne({ username: ctx.params.uname });
   ctx.body = { user };
 }
 
 export async function getUserById(models, ctx) {
   try {
-    const user = models.UserModel.findById(ctx.params.id);
-    if (!user) {
-      ctx.throw(404);
-    }
+    const user = await models.UserModel.findById(ctx.params.id);
+    // if (!user) {
+    //   ctx.throw(404);
+    // }
 
     ctx.body = {
       user,
     };
   } catch (err) {
+    console.log(`Error.name ${err.message}`);
     if (err === 404 || err.name === 'CastError') {
       ctx.throw(404);
     }

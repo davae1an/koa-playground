@@ -1,12 +1,12 @@
 import Router from 'koa-router';
-// import { authUser } from './auth_controller';
+import { authUser } from './auth_controller';
+import models from '../../models';
 
 const authRouter = new Router({ prefix: '/auth' });
 
 
 authRouter.post('/', async (ctx) => {
-  // await authUser(ctx);
-  ctx.body = { route: 'auth unsecured' };
+  await authUser(models, ctx);
 });
 
 export default authRouter;

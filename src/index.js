@@ -18,9 +18,7 @@ mongoose.connect(config.database, {
 
 app.use(logger());
 app.use(bodyParser());
-// unsecured
 app.use(authRouter.routes()).use(authRouter.allowedMethods());
-// secured jwt
 app.use(userRouter.routes()).use(userRouter.allowedMethods());
 
 app.listen(config.port);
