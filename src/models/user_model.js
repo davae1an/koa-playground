@@ -58,14 +58,16 @@ UserSchema.methods.validatePassword = function validatePassword(password) {
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, user.password, (err, isMatch) => {
       if (err) { reject(err); }
-
       resolve(isMatch);
     });
   });
 };
 
-UserSchema.methods.generateToken = function generateToken(payload) {
-  return jsonwebtoken.sign(payload, config.token);
+UserSchema.methods.generateToken = function generateToken() {
+  // used in auth_controllers.js and user_controller.js
+  const user = this;
+  const timestamp = new Date().getTime();
+  return jsonwebtoken.sign({ sub: user.id, iat: timestamp, username: user.username }, config.token);
 };
 
 

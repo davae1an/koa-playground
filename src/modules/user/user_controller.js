@@ -11,6 +11,7 @@ export async function createUser(models, ctx) {
   ctx.body = {
     user: response,
     success: true,
+    token: user.generateToken(),
 
   };
 }
@@ -19,6 +20,7 @@ export async function createUser(models, ctx) {
 export async function getAllUsers(models, ctx) {
   const users = await models.UserModel.find({});
   ctx.body = { users };
+  console.log(ctx.state.user);
 }
 
 export async function getUser(models, ctx) {
@@ -37,7 +39,6 @@ export async function getUserById(models, ctx) {
       user,
     };
   } catch (err) {
-    console.log(`Error.name ${err.message}`);
     if (err === 404 || err.name === 'CastError') {
       ctx.throw(404);
     }

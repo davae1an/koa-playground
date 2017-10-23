@@ -14,7 +14,7 @@ const jwtware = compose([JWTErrorHandler, jwToken]);
 
 // userRouter.use(JWTErrorHandler).use(jwToken); <-- use to make all routes secure
 
-const userRouter = new Router({ prefix: '/user' });
+const userRouter = new Router({ prefix: '/users' });
 
 
 // Secured Routes
@@ -32,7 +32,7 @@ userRouter.get('/username/:uname', jwtware, async (ctx) => {
 
 
 // Unsecured Routes
-userRouter.post('/create', async (ctx) => {
+userRouter.post('/', async (ctx) => {
   await createUser(models, ctx);
 });
 
